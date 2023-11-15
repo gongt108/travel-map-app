@@ -17,40 +17,42 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
 app.use(layouts);
 
-app.use(flash());            // flash middleware
+app.use(flash()); // flash middleware
 
-app.use(session({
-  secret: SECRET_SESSION,    // What we actually will be giving the user on our site as a session cookie
-  resave: false,             // Save the session even if it's modified, make this false
-  saveUninitialized: true    // If we have a new session, we save it, therefore making that true
-}));
+app.use(
+	session({
+		secret: SECRET_SESSION, // What we actually will be giving the user on our site as a session cookie
+		resave: false, // Save the session even if it's modified, make this false
+		saveUninitialized: true, // If we have a new session, we save it, therefore making that true
+	})
+);
 
 // add passport
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-  console.log(res.locals);
-  res.locals.alerts = req.flash();
-  res.locals.currentUser = req.user;
-  next();
+	console.log(res.locals);
+	res.locals.alerts = req.flash();
+	res.locals.currentUser = req.user;
+	next();
 });
 
-app.get('/', (req, res) => {
-  res.render('index');
-})
+app.get('/', isLoggedIn, (req, res) => {
+	res.render('index');
+});
 
 app.use('/auth', require('./controllers/auth'));
 
 // Add this below /auth controllers
 app.get('/profile', isLoggedIn, (req, res) => {
-  const { id, name, email } = req.user.get(); 
-  res.render('profile', { id, name, email });
+	const { id, name, email } = req.user.get();
+	res.render('profile', { id, name, email });
 });
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
-  console.log(`🎧 You're listening to the smooth sounds of port ${PORT} 🎧`);
+	console.log(`🎧 You're listening to the smooth sounds of port ${PORT} 🎧`);
 });
 
 module.exports = server;
