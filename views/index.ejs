@@ -1,1 +1,60 @@
-<h2 class="pt-2">My Collections</h2>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1.0" />
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<h1 class="text-dark">My Collections</h1>
+		<form action="/" class="d-flex flex-row">
+			<input
+				type="text"
+				name="searchBar"
+				id="searchBar"
+				placeholder="Search..."
+			/>
+			<label for="searchBar"></label>
+			<button type="submit"><i class="fa fa-search"></i></button>
+		</form>
+
+		<div id="map" class="mt-4"></div>
+		<% let bookmarks = locations; %>
+
+		<script>
+			var map;
+			let locations = JSON.parse('<%- JSON.stringify(bookmarks) %>');
+
+			function initMap() {
+				const myLatLng = { lat: -33.8605523, lng: 151.1972205 };
+
+				map = new google.maps.Map(document.getElementById('map'), {
+					center: myLatLng,
+					zoom: 12,
+				});
+
+				addMarkers(map);
+			}
+
+			function addMarkers(map) {
+				for (const location in locations) {
+					console.log(locations[location]);
+
+					new google.maps.Marker({
+						position: locations[location],
+						map,
+						title: 'Hello World!',
+					});
+				}
+			}
+		</script>
+		<% let GOOGLE_API_KEY = API_KEY; %>
+
+		<script
+			src="https://maps.googleapis.com/maps/api/js?key=<%= GOOGLE_API_KEY %>&callback=initMap"
+			async
+			defer
+		></script>
+		<!-- <script type="text/javascript" src="../public/js/map.js"></script> -->
+	</body>
+</html>
