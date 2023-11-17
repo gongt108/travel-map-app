@@ -22,6 +22,7 @@ app.set('view engine', 'ejs');
 app.use(require('morgan')('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
+// script.use(express.static(path.join('/public')));
 app.use(layouts);
 
 app.use(flash()); // flash middleware

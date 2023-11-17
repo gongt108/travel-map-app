@@ -1,4 +1,56 @@
-console.log('connected');
+console.log('still connected, but not in use');
+// const form = document.querySelector('form');
+
+// form.onsubmit = function (e) {
+// 	e.preventDefault();
+// 	const searchInput = document.querySelector('#searchBar');
+// 	let searchQuery = searchInput.value;
+
+// 	console.log(GOOGLE_API_KEY);
+
+// 	const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?place_id=ChIJeRpOeF67j4AR9ydy_PIzPuM&key=${GOOGLE_API_KEY}`;
+
+// fetch(unsplashUrl)
+// 	.then((response) => {
+// 		console.log('--- status ---', response.status);
+// 		return response.json();
+// 	})
+// 	.then((data) => {
+// 		// console.log(data.results);
+// 		const imageArray = data.results;
+// 		console.log(imageArray);
+// 		const photoArray = [];
+
+// 		imageArray.forEach(function (image) {
+// 			const altDescription = image.alt_description;
+// 			const fullImage = image.urls.full;
+// 			const nameOfUser = image.user.name;
+// 			const userName = image.user.username;
+// 			const smallProfileImage = image.user.profile_image.small;
+// 			const userLocation = image.user.location;
+
+// 			const newPhoto = new Photo(
+// 				altDescription,
+// 				fullImage,
+// 				nameOfUser,
+// 				userName,
+// 				smallProfileImage,
+// 				userLocation
+// 			);
+
+// 			// console.log(newPhoto);
+
+// 			photoArray.push(newPhoto);
+// 		});
+
+// 		makePhoto(photoArray);
+// 	})
+// 	.catch((error) => {
+// 		console.log('--- + ----');
+// 		console.log();
+// 		console.log('--- + ----');
+// 	});
+// };
 
 // let map;
 // const locations = {

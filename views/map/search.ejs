@@ -1,0 +1,27 @@
+<div>
+	<h3>Searching for...</h3>
+	<p><%= searchText %></p>
+
+	<% searchResults.forEach(result => { %>
+	<div
+		class="d-flex ms-4 mt-3 h-{12rem} w-75 border border-dark rounded align-items-center"
+	>
+		<img
+			src="<%= result.icon %>"
+			alt="location image"
+			class="w-{8rem} h-25 p-2"
+		/>
+		<div class="d-flex flex-column p-2 ms-2">
+			<h3><%= result.name %></h3>
+			<p><%= result.formatted_address %></p>
+			<p>User rating: <%= result.rating %></p>
+			<p>Total ratings: <%= result.user_ratings_total %></p>
+		</div>
+		<a
+			href="#"
+			class="add-collection-btn btn btn-primary text-white btn-md ms-auto me-3"
+			>Add to Collection</a
+		>
+	</div>
+	<% }) %>
+</div>
