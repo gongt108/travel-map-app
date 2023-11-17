@@ -84,62 +84,115 @@ router.get('/search', (req, res) => {
 	// 	});
 });
 
-router.get('/search/:location', (req, res) => {
-	const text = req.params.location;
-	return res.render('map/searchResult', {
-		text: text,
+// router.get('/search/:location', (req, res) => {
+// 	const text = req.params.location;
+// 	return res.render('map/searchResult', {
+// 		text: text,
+// 	});
+// });
+
+router.post('/', (req, res) => {
+	// print the data that the user submits
+	// console.log(req.body);
+	const { id, name, email } = req.user.get();
+	console.log(id);
+	let coordinates = { lat: 34.0549, lng: -118.2426 };
+
+	// console.log('new account', newAccount);
+	// fs.readFile('./data/accounts.json', 'utf8', (error, data) => {
+	// 	if (error) {
+	// 		return res.json({ message: 'error occurred. Please try again.' });
+	// 	} else {
+	// 		data = JSON.parse(data);
+	// 		let index = data.length;
+	// 		newAccount.id = index;
+	// 		data.push(newAccount);
+	// 		let stringData = JSON.stringify(data);
+	// 		// write the data to the file
+	// 		fs.writeFile(
+	// 			'./data/accounts.json',
+	// 			stringData,
+	// 			'utf8',
+	// 			(error, result) => {
+	// 				return res.redirect(`accounts/${newAccount.accountNumber}`);
+	// 			}
+	// 		);
+	// 	}
+	// });
+});
+
+router.put('/:accountNumber', (req, res) => {
+	// find the account with the accountNumber
+	// grab the account by accountNumber and update
+	let updatedAccount = {};
+	fs.readFile('./data/accounts.json', 'utf8', (error, data) => {
+		if (error) {
+			return res.json({ message: 'Error occured. Please try again...' });
+		} else {
+			data = JSON.parse(data); // array of objects(account)
+			// use map to iterate through and update the fields
+			newData = data.map((account) => {
+				// check to see if the account number is the same.
+				if (account.accountNumber === req.params.accountNumber) {
+					// change the data
+					account.pin = req.body.pin || account.pin; // if there is a pin to change, then it will update
+					account.amount = Number(req.body.amount || account.amount);
+					account.accountName = req.body.accountName || account.accountName;
+					updatedAccount = { ...account };
+					return account;
+				} else {
+					return account;
+				}
+			});
+
+			// write the new array of objects inside of the accounts.json file
+			fs.writeFile(
+				'./data/accounts.json',
+				JSON.stringify(newData),
+				'utf8',
+				(error, result) => {
+					return res.redirect(`/accounts/${req.params.accountNumber}`);
+				}
+			);
+		}
 	});
 });
 
-router.post(
-	'/login',
-	passport.authenticate('local', {
-		successRedirect: '/',
-		failureRedirect: '/auth/login',
-		successFlash: 'Welcome back ...',
-		failureFlash: 'Either email or password is incorrect',
-	})
-);
+router.delete('/:accountNumber', (req, res) => {
+	const accountNumber = req.params.accountNumber;
 
-router.post('/signup', async (req, res) => {
-	// we now have access to the user info (req.body);
-	const { email, name, password, confirmPassword } = req.body; // goes and us access to whatever key/value inside of the object
-	if (password === confirmPassword) {
-		try {
-			const [_user, created] = await user.findOrCreate({
-				where: { email },
-				defaults: { name, password },
-			});
+	fs.readFile('./data/accounts.json', 'utf8', (error, data) => {
+		if (error) {
+			return res.json({ message: 'Error occurred. Please try again' });
+		} else {
+			data = JSON.parse(data);
 
-			if (created) {
-				// if created, success and we will redirect back to / page
-				console.log(`----- ${_user.name} was created -----`);
-				const successObject = {
-					successRedirect: '/',
-					successFlash: `Welcome ${_user.name}. Account was created and logging in...`,
-				};
-				//
-				passport.authenticate('local', successObject)(req, res);
+			// Use the filter method to find the account with the specified ID
+			const accountsToKeep = data.filter(
+				(account) => account.accountNumber !== accountNumber
+			);
+
+			// If the filtered array has the same length as the original, the account was not found
+			if (accountsToKeep.length === data.length) {
+				return res.status(404).json({ message: 'Account not found' });
 			} else {
-				// Send back email already exists
-				req.flash('error', 'Email already exists');
-				res.redirect('/auth/signup'); // redirect the user back to sign up page to try again
+				// Update the data with the filtered accounts
+				data = accountsToKeep;
+				const stringData = JSON.stringify(data);
+
+				// Write the updated data to the file
+				fs.writeFile(
+					'./data/accounts.json',
+					stringData,
+					'utf8',
+					(error, result) => {
+						return res.redirect('/accounts');
+					}
+				);
 			}
-		} catch (error) {
-			// There was an error that came back; therefore, we just have the user try again
-			console.log('**************Error');
-			console.log(error);
-			req.flash('error', error.message);
-			res.redirect('/auth/signup');
 		}
-	} else {
-		console.log('test failed');
-		req.flash(
-			'error',
-			'Validation error: Please verify that the passwords match.'
-		);
-		res.redirect('/auth/signup');
-	}
+	});
 });
 
+// export router
 module.exports = router;
