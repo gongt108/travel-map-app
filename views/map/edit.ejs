@@ -1,0 +1,58 @@
+<div id="edit-form" class="d-flex flex-column mx-auto mt-8">
+  <h1 class="h3 mb-3 fw-normal text-center text-dark">Edit Bookmark</h1>
+  <form action="/map/edit/<%= bookmarkId %>?_method=PUT" method="POST">
+    <label for="nickname">Change Nickname:</label>
+    <input
+      type="text"
+      name="nickname"
+      id="nickname"
+      class="form-control mb-2"
+      placeholder="Nickname"
+      value="<%= bookmark.name %>"
+    />
+    <p class="mb-2">Change Coordinates?</p>
+
+    <input
+      type="text"
+      name="latitude"
+      id="latitude"
+      class="form-control mb-2"
+      placeholder="Latitude"
+      value="<%= Math.abs(bookmark.lat) %>"
+    />
+
+    <div class="d-flex flex-row my-auto mb-2">
+      <input type="radio" id="east" name="ew" value="east" /* prettier-ignore */
+      <%= bookmark.lat >= 0 ? 'checked' : '' %> class="ms-2" />
+      <label for="east" class="ms-2">East</label>
+      <input type="radio" id="west" name="ew" value="west" /* prettier-ignore */
+      <%= bookmark.lat < 0 ? 'checked' : '' %> class="ms-2" class="ms-2" />
+      <label for="west" class="ms-2">West</label>
+    </div>
+    <input
+      type="text"
+      name="longitude"
+      id="longitude"
+      class="form-control mb-2"
+      placeholder="Longitude"
+      value="<%= Math.abs(bookmark.lng) %>"
+    />
+    <div class="d-flex mb-2">
+      <div class="d-flex flex-row my-auto mx-2 mb-2">
+        <input type="radio" id="north" name="ns" value="north" /*
+        prettier-ignore */ <%= bookmark.lng >= 0 ? 'checked' : '' %> />
+        <label for="north" class="ms-2">North</label>
+        <input type="radio" id="south" name="ns" value="south" class="ms-2" /*
+        prettier-ignore */ <%= bookmark.lng < 0 ? 'checked' : '' %> class="ms-2"
+        />
+        <label class="ms-2" for="south">South</label>
+      </div>
+    </div>
+    <div class="mt-4 d-flex mx-5">
+      <button class="btn btn-primary w-50" type="submit">
+        Update Bookmark
+      </button>
+      <a href="/map" class="btn btn-danger ms-5 w-25">Cancel</a>
+    </div>
+  </form>
+</div>

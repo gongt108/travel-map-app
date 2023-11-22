@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const passport = require('./config/ppConfig');
 const isLoggedIn = require('./middleware/isLoggedIn');
 const { Loader, Marker } = require('@googlemaps/js-api-loader');
+const methodOverride = require('method-override');
 
 // environment variables
 SECRET_SESSION = process.env.SECRET_SESSION;
@@ -22,8 +23,8 @@ app.set('view engine', 'ejs');
 app.use(require('morgan')('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
-// script.use(express.static(path.join('/public')));
 app.use(layouts);
+app.use(methodOverride('_method'));
 
 app.use(flash()); // flash middleware
 
@@ -63,11 +64,12 @@ const locations = {
 	darlingHarbour: { lat: -33.87488, lng: 151.1987113 },
 	barangaroo: { lat: -33.8605523, lng: 151.1972205 },
 };
-app.get('/', (req, res) => {
-	return res.render('index', {
-		locations: locations,
-		API_KEY: API_KEY,
-	});
+app.get('/', isLoggedIn, (req, res) => {
+	res.redirect('/map');
+	// return res.render('index', {
+	// 	locations: locations,
+	// 	API_KEY: API_KEY,
+	// });
 });
 
 app.use('/auth', require('./controllers/auth'));

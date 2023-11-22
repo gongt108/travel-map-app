@@ -6,32 +6,46 @@
 		<link rel="stylesheet" href="css/style.css" />
 	</head>
 	<body>
-		<h1 class="text-dark">My Collections</h1>
-		<form action="/map/search">
-			<label for="searchBar" class="text-dark">Location:</label>
-			<div class="d-flex flex-row">
-				<input
-					type="text"
-					name="searchBar"
-					id="searchBar"
-					placeholder="Type address..."
-					class="w-75"
-				/>
-				<button type="submit" class="btn"><i class="fa fa-search"></i></button>
+		<div class="d-flex flex-row">
+			<div
+				id="sidebar"
+				class="d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto"
+			>
+				<p>Welcome, <%= name %></p>
+				<h3 class="text-dark">My Collections</h3>
+				<ul id="side-nav" class="nav flex-column"></ul>
 			</div>
-		</form>
+			<div class="w-75 mt-8 ms-4">
+				<form action="/map/search">
+					<div class="d-flex flex-row">
+						<input
+							type="text"
+							name="searchBar"
+							id="searchBar"
+							placeholder="Type address..."
+							class="w-75"
+						/>
+						<button type="submit" class="btn">
+							<i class="fa fa-search"></i>
+						</button>
+					</div>
+				</form>
 
-		<div id="map" class="mt-4"></div>
+				<div id="map" class="mt-4"></div>
+			</div>
+		</div>
 		<% let bookmarks = locations; %>
 
 		<script>
 			var map;
+			const sideNav = document.querySelector('#side-nav');
 			let locations = JSON.parse('<%- JSON.stringify(bookmarks) %>');
 
 			function initMap() {
 				const myLatLng = { lat: -33.8605523, lng: 151.1972205 };
 
 				map = new google.maps.Map(document.getElementById('map'), {
+					mapId: 'a938f85377780f92',
 					center: myLatLng,
 					zoom: 12,
 				});
@@ -40,24 +54,61 @@
 			}
 
 			function addMarkers(map) {
+				const infoWindow = new google.maps.InfoWindow();
+
 				for (const location in locations) {
-					new google.maps.Marker({
+					let markerView = new google.maps.marker.AdvancedMarkerView({
 						position: locations[location],
 						map,
-						title: 'Hello World!',
+						title: location,
 					});
+					let markerContent =
+						'<div class="marker-content">' +
+						`<h6>${location}</h6>` +
+						`<p>${location}</p>` +
+						`<p>${location}</p>` +
+						`<p>${location}</p>` +
+						'</div>';
+
+					const bookmarkDiv = document.createElement('div');
+					bookmarkDiv.setAttribute(
+						'class',
+						'side-nav-item-div d-flex flex-row pe-4 float-end'
+					);
+					const bookmarkItem = document.createElement('p');
+					bookmarkItem.setAttribute(
+						'class',
+						'side-nav-item me-auto align-middle'
+					);
+					bookmarkItem.textContent = location;
+					const editIcon = document.createElement('a');
+					editIcon.setAttribute('class', 'side-nav-item me-2');
+					editIcon.innerHTML = '<i class="fa fa-pencil"></i>';
+					const deleteIcon = document.createElement('a');
+					deleteIcon.setAttribute('class', 'side-nav-item ');
+					deleteIcon.innerHTML = '<i class="fa fa-trash"></i>';
+					bookmarkDiv.append(bookmarkItem, editIcon, deleteIcon);
+					sideNav.appendChild(bookmarkDiv);
+
+					function bookmarkSelect() {
+						infoWindow.close();
+						infoWindow.setContent(markerContent);
+						infoWindow.open(markerView.map, markerView);
+						map.center = markerView.position;
+						map.zoom = 14;
+					}
+
+					markerView.addListener('click', bookmarkSelect);
+					bookmarkDiv.addEventListener('click', bookmarkSelect);
 				}
 			}
 		</script>
 		<% let GOOGLE_API_KEY = API_KEY; %>
 
 		<script
-			src="https://maps.googleapis.com/maps/api/js?key=<%= GOOGLE_API_KEY %>&callback=initMap"
+			src="https://maps.googleapis.com/maps/api/js?key=<%= GOOGLE_API_KEY %>&callback=initMap&v=beta&libraries=marker"
 			async
 			defer
 		></script>
-		<script src="https://maps.googleapis.com/maps/api/geocode/json?place_id=ChIJeRpOeF67j4AR9ydy_PIzPuM&key=<%= GOOGLE_API_KEY %>
-		"></script>
-		<script src="js/map.js"></script>
 	</body>
 </html>
