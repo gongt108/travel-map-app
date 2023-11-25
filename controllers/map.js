@@ -5,6 +5,7 @@ const passport = require("../config/ppConfig");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const db = require("../models");
 
+// API
 API_KEY = process.env.API_KEY;
 
 // import models
@@ -18,40 +19,37 @@ router.get("/", isLoggedIn, async (req, res) => {
     const user = await db.user.findOne({ where: { id: id } });
     const bookmarks = await user.getBookmarks();
 
-    await Promise.all(
-      bookmarks.map(async (bookmark) => {
-        let nickname = bookmark.name || `Bookmark ${bookmark.id + 1}`;
-        let latitude = bookmark.lat;
-        let longitude = bookmark.lng;
-        locations[nickname] = {
-          lat: latitude,
-          lng: longitude,
-        };
-      })
-    );
+    if (bookmarks !== undefined) {
+      locations = {};
 
-    Promise.resolve().then(() => {
+      await Promise.all(
+        bookmarks.map(async (bookmark) => {
+          let nickname = bookmark.name || `Bookmark ${bookmark.id + 1}`;
+          let latitude = bookmark.lat;
+          let longitude = bookmark.lng;
+          locations[nickname] = [
+            { id: bookmark.id },
+            { coordinates: { lat: latitude, lng: longitude } },
+          ];
+        })
+      );
+
+      Promise.resolve().then(() => {
+        res.render("map/index", {
+          locations: locations || "",
+          API_KEY: API_KEY,
+          userId: id,
+          name: name,
+        });
+      });
+    } else {
       res.render("map/index", {
-        locations: locations,
+        locations: locations || {},
         API_KEY: API_KEY,
         userId: id,
         name: name,
       });
-    });
-
-    //   db.user.findOne({ where: { id: id } }).then((user) => {
-    //     user.getBookmarks().then((bookmarks) => {
-    //       bookmarks.map((bookmark) => {
-    //         let nickname = bookmark.name || `Bookmark ${bookmark.id + 1}`;
-    //         let latitude = bookmark.lat;
-    //         let longitude = bookmark.lng;
-    //         locations[nickname] = {
-    //           lat: latitude,
-    //           lng: longitude,
-    //         };
-    //       });
-    //     });
-    //   });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).send("Internal Server Error");
@@ -63,50 +61,34 @@ router.get("/search", (req, res) => {
   const googleSearchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json
 	?query=${searchText}
 	&key=${API_KEY}`;
-  const searchUrl = searchText.split(" ").join("%20");
 
-  return res.render(`map/search`, {
-    searchText: "123 Main st",
-    searchResults: [
-      {
-        name: "123 Main St",
-        formatted_address: "Solomon, KS 67480, United States",
-        rating: "0",
-        user_ratings_total: 0,
-      },
-      {
-        name: "Banana Republic",
-        formatted_address: "Solomon, KS 67480, United States",
-        rating: "0",
-        user_ratings_total: 0,
-      },
-      {
-        name: "55 S Market",
-        formatted_address: "Solomon, KS 67480, United States",
-        rating: "0",
-        user_ratings_total: 0,
-      },
-    ],
-  });
+  fetch(googleSearchUrl)
+    .then((response) => {
+      console.log("--- status ---", response.status);
+      return response.json();
+    })
+    .then((data) => {
+      const searchResults = data.results;
+      console.log(searchResults);
 
-  // fetch(googleSearchUrl)
-  // 	.then((response) => {
-  // 		console.log('--- status ---', response.status);
-  // 		return response.json();
-  // 	})
-  // 	.then((data) => {
-  // 		const searchResults = data.results;
-  // 		console.log(searchResults);
+      return res.render(`map/search`, {
+        searchText: searchText,
+        searchResults: searchResults,
+      });
+    })
+    .catch((error) => {
+      console.log("--- + ----");
+      console.log("error: ", error);
+    });
+});
 
-  // 		return res.render(`map/search`, {
-  // 			searchText: searchText,
-  // 			searchResults: searchResults,
-  // 		});
-  // 	})
-  // 	.catch((error) => {
-  // 		console.log('--- + ----');
-  // 		console.log('error: ', error);
-  // 	});
+router.get("/new", isLoggedIn, (req, res) => {
+  const { id } = req.user.get();
+  const latitutde = req.query.lat;
+  const longitude = req.query.lng;
+
+  console.log(latitutde, longitude);
+  return res.render("map/new", { lat: latitutde, lng: longitude });
 });
 
 router.get("/edit/:bookmarkId", isLoggedIn, (req, res) => {
@@ -128,29 +110,51 @@ router.get("/edit/:bookmarkId", isLoggedIn, (req, res) => {
     });
 });
 
-router.get("/delete", (req, res) => {
-  return res.render("map/delete");
+router.get("/delete/:bookmarkId", isLoggedIn, (req, res) => {
+  const { id } = req.user.get();
+  const bookmarkId = req.params.bookmarkId;
+
+  // Use the fetch function to make the API request
+
+  db.bookmark
+    .findOne({
+      where: {
+        id: bookmarkId,
+        userId: id,
+      },
+    })
+    .then((bookmark) => {
+      return res.render("map/delete", {
+        bookmarkId: bookmarkId,
+        bookmark,
+        bookmark,
+      });
+    });
 });
 
 router.post("/", isLoggedIn, (req, res) => {
-  const { id, name, email } = req.user.get();
+  const { id } = req.user.get();
   console.log(id);
-  let coordinates = { lat: 34.0549, lng: -118.2426 };
+
+  //   let coordinates = { lat: 34.0549, lng: -118.2426 };
+
   db.user.findOne({ where: { id: id } }).then((user) => {
     user
       .createBookmark({
-        lat: coordinates.lat,
-        lng: coordinates.lng,
-        name: "home",
+        lat: req.query.lat,
+        lng: req.query.lng,
+        name: req.body.nickname || "New Bookmark",
+        address: req.body.address,
         userId: id,
       })
       .then((newBookmark) => {
         console.log("here is the new bookmark", newBookmark.toJSON());
+        res.redirect("/");
       });
   });
 });
 
-router.put("/edit/:id", isLoggedIn, (req, res) => {
+router.put("/edit/:bookmarkId", isLoggedIn, (req, res) => {
   const { id } = req.user.get();
 
   let updatedBookmark = {};
@@ -170,7 +174,7 @@ router.put("/edit/:id", isLoggedIn, (req, res) => {
     db.bookmark.update(
       { ...updatedBookmark },
       {
-        where: { id: req.params.id, userId: id },
+        where: { id: req.params.bookmarkId, userId: id },
       }
     );
     res.redirect("/map");
@@ -180,13 +184,15 @@ router.put("/edit/:id", isLoggedIn, (req, res) => {
 });
 
 router.delete("/delete/:bookmarkId", isLoggedIn, (req, res) => {
-  const { id } = req.user.get();
+  const { id, name } = req.user.get();
 
   try {
     db.bookmark.destroy({
       where: { id: req.params.bookmarkId, userId: id },
     });
-    res.render("/map");
+    console.log("deleted");
+
+    res.redirect("/map");
   } catch (error) {
     console.log("error", error);
   }

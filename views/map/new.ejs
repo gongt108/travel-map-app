@@ -1,0 +1,36 @@
+<div class="mt-8 ms-5">
+  <h3>New Bookmark</h3>
+  <form
+    action="/map?lat=<%= lat %>&lng=<%= lng %>"
+    method="POST"
+    class="d-flex flex-column mt-4 w-50"
+  >
+    <label class="mb-2" for="nickname">Nickname: (Optional)</label>
+    <input
+      class="mb-2"
+      type="text"
+      id="nickname"
+      name="nickname"
+      placeholder="New Bookmark"
+    />
+    <label class="mb-2" for="inputtedAddress">Address:</label>
+    <input
+      class="mb-2"
+      type="text"
+      id="address"
+      name="address"
+      placeholder="123 Main St"
+      required
+    />
+
+    <div class="mt-3 d-flex mx-5">
+      <button
+        class="add-collection-btn btn btn-primary text-white w-50"
+        type="submit"
+      >
+        Add to Collection
+      </button>
+      <a href="/map" class="btn btn-danger ms-5 w-25">Cancel</a>
+    </div>
+  </form>
+</div>

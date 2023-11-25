@@ -57,8 +57,9 @@
         const infoWindow = new google.maps.InfoWindow();
 
         for (const location of Object.keys(locations)) {
+          let data = locations[location];
           let markerView = new google.maps.marker.AdvancedMarkerView({
-            position: locations[location],
+            position: data[1].coordinates,
             map,
             title: location,
           });
@@ -82,10 +83,12 @@
           );
           bookmarkItem.textContent = location;
           const editIcon = document.createElement('a');
+          editIcon.href = `/map/edit/${data[0].id}`;
           editIcon.setAttribute('class', 'side-nav-item me-2');
           editIcon.innerHTML = '<i class="fa fa-pencil"></i>';
           const deleteIcon = document.createElement('a');
           deleteIcon.setAttribute('class', 'side-nav-item ');
+          deleteIcon.href = `/map/delete/${data[0].id}`;
           deleteIcon.innerHTML = '<i class="fa fa-trash"></i>';
           bookmarkDiv.append(bookmarkItem, editIcon, deleteIcon);
           sideNav.appendChild(bookmarkDiv);

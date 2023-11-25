@@ -1,16 +1,15 @@
 <div class="d-flex flex-column text-center mt-2w-50">
-	<h3>Are you sure you want to delete</h3>
-	<h3>Bookmark 3?</h3>
-	<div class="d-flex flex-column mt-4 mx-auto">
-		<p>Address: 123 Main St</p>
-		<p>Coordinates:</p>
-	</div>
-	<form
-		action="/map/delete/1?_method=DELETE"
-		METHOD="POST"
-		class="d-flex flex-row mx-auto mt-2 w-25 px-5 justify-content-between"
-	>
-		<button class="btn btn-danger mx-2">Yes</button>
-		<button class="btn btn-secondary mx-2">No</button>
-	</form>
+  <h3>Are you sure you want to delete</h3>
+  <div class="d-flex flex-column mt-4 mx-auto">
+    <p>Address: <%= bookmark.address %></p>
+    <p>Coordinates: <%= bookmark.lat %>, <%= bookmark.lng %></p>
+  </div>
+  <form
+    action="/map/delete/<%= bookmarkId %>?_method=DELETE"
+    method="POST"
+    class="d-flex flex-row mx-auto mt-2 w-25 px-5 justify-content-between"
+  >
+    <button class="btn btn-danger mx-2">Yes</button>
+    <button class="btn btn-secondary mx-2">No</button>
+  </form>
 </div>
