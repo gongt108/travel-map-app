@@ -1,7 +1,7 @@
 <div id="edit-form" class="d-flex flex-column mx-auto mt-8">
   <h1 class="h3 mb-3 fw-normal text-center text-dark">Edit Bookmark</h1>
   <form action="/map/edit/<%= bookmarkId %>?_method=PUT" method="POST">
-    <label for="nickname">Change Nickname:</label>
+    <label for="nickname">Nickname:</label>
     <input
       type="text"
       name="nickname"
@@ -10,7 +10,16 @@
       placeholder="Nickname"
       value="<%= bookmark.name %>"
     />
-    <p class="mb-2">Change Coordinates?</p>
+    <label for="nickname">Address:</label>
+    <input
+      type="text"
+      name="address"
+      id="address"
+      class="form-control mb-2"
+      placeholder="123 Main Street, New York, NY 12345"
+      value="<%= bookmark.address %>"
+    />
+    <p class="mb-2">Coordinates:</p>
 
     <input
       type="text"

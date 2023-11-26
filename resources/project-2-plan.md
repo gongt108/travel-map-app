@@ -8,9 +8,9 @@ In this space below, list **THREE** ideas for your Project 2. For each idea, inc
 
 ---
 
-1.
-2.
-3.
+1. As someone who travels frequently, I want to see all my bookmarks easily for a given area. [Google Maps API](https://developers.google.com/maps)
+2. As someone who enjoys trying new restaurants, I want a fun way to find new restaurants through a randomizer. [Yelp API](https://docs.developer.yelp.com/docs/fusion-intro)
+3. As a frequent flyer, I want an easy way to track flights. [Flight API](https://spire.com/aviation)
 
 ---
 

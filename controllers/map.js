@@ -11,25 +11,32 @@ API_KEY = process.env.API_KEY;
 // import models
 const { user } = require("../models");
 const { FLOAT } = require("sequelize");
+const bookmark = require("../models/bookmark");
 let locations = {};
 
 router.get("/", isLoggedIn, async (req, res) => {
   try {
     const { id, name } = req.user.get();
     const user = await db.user.findOne({ where: { id: id } });
+    console.log("-----><------");
     const bookmarks = await user.getBookmarks();
+    console.log("checking bookmarks", bookmarks);
+    locations = {};
 
-    if (bookmarks !== undefined) {
-      locations = {};
+    // const bookmarks = {};
+
+    if (Object.keys(bookmarks).length > 0) {
+      console.log("running this section of code");
 
       await Promise.all(
         bookmarks.map(async (bookmark) => {
-          let nickname = bookmark.name || `Bookmark ${bookmark.id + 1}`;
+          let bookmarkId = bookmark.id;
           let latitude = bookmark.lat;
           let longitude = bookmark.lng;
-          locations[nickname] = [
-            { id: bookmark.id },
+          locations[bookmarkId] = [
+            { nickname: bookmark.name },
             { coordinates: { lat: latitude, lng: longitude } },
+            { address: bookmark.address },
           ];
         })
       );
@@ -43,6 +50,8 @@ router.get("/", isLoggedIn, async (req, res) => {
         });
       });
     } else {
+      console.log("bookmark is empty");
+      console.log("id:", id);
       res.render("map/index", {
         locations: locations || {},
         API_KEY: API_KEY,
@@ -69,7 +78,6 @@ router.get("/search", (req, res) => {
     })
     .then((data) => {
       const searchResults = data.results;
-      console.log(searchResults);
 
       return res.render(`map/search`, {
         searchText: searchText,
@@ -143,7 +151,9 @@ router.post("/", isLoggedIn, (req, res) => {
       .createBookmark({
         lat: req.query.lat,
         lng: req.query.lng,
-        name: req.body.nickname || "New Bookmark",
+        name:
+          req.body.nickname ||
+          `New Bookmark${Math.floor(Math.random() * 1000000)}`,
         address: req.body.address,
         userId: id,
       })
@@ -160,6 +170,9 @@ router.put("/edit/:bookmarkId", isLoggedIn, (req, res) => {
   let updatedBookmark = {};
   if (req.body.name !== null && req.body.name != "") {
     updatedBookmark["name"] = req.body.nickname;
+  }
+  if (req.body.address !== null && req.body.address != "") {
+    updatedBookmark["address"] = req.body.address;
   }
   if (req.body.latitude !== null && req.body.latitude != "") {
     let lat = parseFloat(req.body.latitude).toFixed(4);

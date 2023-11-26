@@ -42,12 +42,12 @@
       let locations = JSON.parse('<%- JSON.stringify(bookmarks) %>');
 
       function initMap() {
-        const myLatLng = { lat: -33.8605523, lng: 151.1972205 };
+        const myLatLng = { lat: 33.9605523, lng: -118.1972205 };
 
         map = new google.maps.Map(document.getElementById('map'), {
           mapId: 'a938f85377780f92',
           center: myLatLng,
-          zoom: 12,
+          zoom: 10,
         });
 
         addMarkers(map);
@@ -58,17 +58,16 @@
 
         for (const location of Object.keys(locations)) {
           let data = locations[location];
+          console.log(data[0].nickname);
           let markerView = new google.maps.marker.AdvancedMarkerView({
             position: data[1].coordinates,
             map,
-            title: location,
+            title: data[0].nickname,
           });
           let markerContent =
             '<div class="marker-content">' +
-            `<h6>${location}</h6>` +
-            `<p>${location}</p>` +
-            `<p>${location}</p>` +
-            `<p>${location}</p>` +
+            `<h6>${data[0].nickname}</h6>` +
+            `<p>${data[2].address}</p>` +
             '</div>';
 
           const bookmarkDiv = document.createElement('div');
@@ -81,14 +80,14 @@
             'class',
             'side-nav-item me-auto align-middle'
           );
-          bookmarkItem.textContent = location;
+          bookmarkItem.textContent = data[0].nickname;
           const editIcon = document.createElement('a');
-          editIcon.href = `/map/edit/${data[0].id}`;
+          editIcon.href = `/map/edit/${location}`;
           editIcon.setAttribute('class', 'side-nav-item me-2');
           editIcon.innerHTML = '<i class="fa fa-pencil"></i>';
           const deleteIcon = document.createElement('a');
           deleteIcon.setAttribute('class', 'side-nav-item ');
-          deleteIcon.href = `/map/delete/${data[0].id}`;
+          deleteIcon.href = `/map/delete/${location}`;
           deleteIcon.innerHTML = '<i class="fa fa-trash"></i>';
           bookmarkDiv.append(bookmarkItem, editIcon, deleteIcon);
           sideNav.appendChild(bookmarkDiv);
