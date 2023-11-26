@@ -30,13 +30,25 @@ In the space below:
 
 ### ERD
 
----
+![Alt text](erd.png)
 
 ### User Stories
+
+- As a user, I want to be able to log in, but only if the email and password are correct.
+- As a user, I want to be able to create an account if I don't have one.
+- As a user, I want to be redirected to the login page if I am not logged in.
+- As a user, I want to be able to log out so that the next person using the browser cannot access my account.
+- As a user, I want to be able to see all of saved bookmarks on a zoomable map.
+- As a user, I want to be able to click on the bookmark pins to view information about it.
+- As a user, I want to be able to edit or delete my saved bookmarks.
+- As a user, I want to be able to search places to create new bookmarks.
+- As a user, I don't want someone without my login credentials to add, edit, or delete my bookmarks.
 
 ---
 
 ### Wireframes
+
+![Alt text](wireframe.png)
 
 ---
 
@@ -49,11 +61,11 @@ Make a PR when you're done!
 ```
 ### FUNDAMENTALS
 - [ ] Deployed (e.g. Heroku)
-- [ ] Site has basic functionality related to its goal
-- [ ] At least 2 GET routes (other than auth)
-- [ ] At least 1 POST route
-- [ ] At least 1 DELETE route
-- [ ] At least 1 PUT route
+- [X] Site has basic functionality related to its goal
+- [X] At least 2 GET routes (other than auth)
+- [X] At least 1 POST route
+- [X] At least 1 DELETE route
+- [X] At least 1 PUT route
 ```
 
 `card` SUFFICIENT DIFFICULTY
@@ -72,12 +84,12 @@ Make a PR when you're done!
 
 ```
 ### AUTH/SECURITY (Mostly From Template Boilerplate)
-- [ ] Log in works (required: boilerplate or better)
-- [ ] Sensible error messages for bad login info  (boilerplate or better)
-- [ ] Passwords hashed in database
-- [ ] Passwords in form are input type="password" (dots)
-- [ ] Password verification is checked
-- [ ] Can't sneak edit/delete data that I don't own by typing in random ids
+- [X] Log in works (required: boilerplate or better)
+- [X] Sensible error messages for bad login info  (boilerplate or better)
+- [X] Passwords hashed in database
+- [X] Passwords in form are input type="password" (dots)
+- [X] Password verification is checked
+- [X] Can't sneak edit/delete data that I don't own by typing in random ids
 ```
 
 `card` GITHUB USAGE
@@ -89,7 +101,7 @@ Make a PR when you're done!
 - [ ] `.gitignore` properly set up
 - [ ] No API keys in Github code (used a .env file)
 - [ ] Multiple commits per day
-- [ ] Repo up on day 1 of project week or sooner
+- [X] Repo up on day 1 of project week or sooner
 - [ ] `README` has *Installation Instructions*
 ```
 
@@ -97,8 +109,8 @@ Make a PR when you're done!
 
 ```
 ### DATABASE USAGE
-- [ ] At least 2 Models other than join tables (required)
-- [ ] Relationships were set up appropriately between models
+- [X] At least 2 Models other than join tables (required)
+- [X] Relationships were set up appropriately between models
 - [ ] Avoided global variables, storing data in files, etc
 - [ ] No raw file/image data stored in database, etc
 ```
@@ -108,8 +120,8 @@ Make a PR when you're done!
 ```
 ### CODE STYLE
 - [ ] Generally DRY code / No enormous files
-- [ ] Proper indentation (or mostly pretty good!)
-- [ ] Naming conventions kept
+- [X] Proper indentation (or mostly pretty good!)
+- [X] Naming conventions kept
 - [ ] No glaring logic errors
 ```
 
@@ -117,9 +129,9 @@ Make a PR when you're done!
 
 ```
 ### USER EXPERIENCE
-- [ ] Effort was put into design
+- [X] Effort was put into design
 - [ ] No broken links (server errors or 404s)
-- [ ] Typing a purposely bad link renders an error ejs page
+- [X] Typing a purposely bad link renders an error ejs page
 - [ ] Content is responsive to screen size changes
 - [ ] No glaring alignment or grid errors
 ```
