@@ -44,7 +44,7 @@ describe("Creating a Bookmark", function () {
         .expect(302, done);
     });
 
-    it("should redirect to /auth/signup on failure", function (done) {
+    it("should not redirect on failure", function (done) {
       request(app)
         .post("/map")
         .set("Content-Type", "application/x-www-form-urlencoded")
