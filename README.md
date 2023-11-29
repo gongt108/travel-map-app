@@ -67,7 +67,7 @@ Users are automatically redirected here if they are no logged in.
 
 #### Signup
 
-![Signup Page](./resources/signup-page.png)
+![Signup Page](./resources/signup-screen.png)
 
 Users can create an account here if they do not have one or wish create another one. Once the user submits the signup form, the following validations occur:
 
@@ -81,9 +81,9 @@ Users can create an account here if they do not have one or wish create another 
 
 This page displays each user's information, provides them with the tools to edit or delete their account and displays all of the recommendations they have generated and their associated information.
 
-#### App
+#### Map
 
-![App Page](./resources/app-preview.png)
+![Map Page](./resources/empty-map.png)
 
 Users will find their saved bookmarks plotted on a map to easily see which locations are near each other.
 
