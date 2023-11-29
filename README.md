@@ -63,7 +63,7 @@ Travel Map allows users to:
 
 ![Login Page](./resources/login-screen.png)
 
-Users are automatically redirected here if they are no logged in.
+Users are automatically redirected here if they are not logged in.
 
 #### Signup
 
@@ -79,7 +79,7 @@ Users can create an account here if they do not have one or wish create another 
 
 ![User Profile Page](./resources/profile.png)
 
-This page displays each user's information, provides them with the tools to edit or delete their account and displays all of the recommendations they have generated and their associated information.
+This page displays each user's information. Edit feature coming soon.
 
 #### Map
 
