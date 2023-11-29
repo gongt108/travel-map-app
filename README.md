@@ -2,7 +2,7 @@
 
 See all of your bookmarks on Google Maps.
 
-![LoL Recommender](https://github.com/soyrvelez/lol-champ-recommender/blob/main/resources/lolrecommender.png?sanitize=true)
+![Travel Map](./resources/app-preview.png)
 
 ## What is it?
 
