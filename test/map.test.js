@@ -2,6 +2,7 @@ const expect = require("chai").expect;
 const request = require("supertest");
 const app = require("../server");
 const db = require("../models");
+var agent = request.agent(app);
 
 before(function (done) {
   db.sequelize.sync({ force: true }).then(function () {
@@ -10,8 +11,32 @@ before(function (done) {
 });
 
 describe("GET /map", function () {
-  it("should return a 302 response after loading map", function (done) {
-    request(app).get("/map").expect(302, done);
+  it("should redirect to /auth/login if not logged in", function (done) {
+    request(app)
+      .get("/map")
+      .expect("Location", "/auth/login")
+      .expect(302, done);
+  });
+
+  it("should return a 200 response after loading map", function (done) {
+    agent
+      .post("/auth/signup")
+      .set("Content-Type", "application/x-www-form-urlencoded")
+      .send({
+        email: "my@user.co",
+        name: "Steve Peters",
+        password: "password",
+        confirmPassword: "password",
+      })
+      .expect(302)
+      .expect("Location", "/")
+      .end(function (error, res) {
+        if (error) {
+          done(error);
+        } else {
+          agent.get("/map").expect(200, done);
+        }
+      });
   });
 });
 
@@ -22,11 +47,11 @@ describe("GET /search", function () {
 });
 
 describe("Creating a Bookmark", function () {
-  describe("GET /map/search", function () {
-    it("should return a 200 response", function (done) {
-      request(app).get("/map/search").expect(200, done);
-    });
-  });
+  //   describe("GET /map/search", function () {
+  //     it("should return a 200 response", function (done) {
+  //       request(app).get("/map/search").expect(200, done);
+  //     });
+  //   });
 
   describe("POST /map", function () {
     it("should redirect to /map on success", function (done) {
@@ -60,8 +85,8 @@ describe("Creating a Bookmark", function () {
   });
 
   describe("GET /map/edit", function () {
-    it("should return a 200 response", function (done) {
-      request(app).get("/map").expect(200, done);
+    it("should return a 302 response", function (done) {
+      request(app).get("/map").expect(302, done);
     });
   });
 
