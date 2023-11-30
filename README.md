@@ -27,9 +27,7 @@ Travel Map allows users to:
 
 ## Navigating The Project
 
-### Data Models
-
-### Default Routes
+### User Routes
 
 | Method | Path         | Location  | Purpose              |
 | ------ | ------------ | --------- | -------------------- |
@@ -40,6 +38,16 @@ Travel Map allows users to:
 | POST   | /auth/signup | auth.js   | Creates User         |
 | GET    | /auth/logout | auth.js   | Removes session info |
 | GET    | /profile     | server.js | Regular User Profile |
+
+### Map Routes
+
+| Method | Path        | Location | Purpose               |
+| ------ | ----------- | -------- | --------------------- |
+| GET    | /map        | map.js   | Home page             |
+| GET    | /map/search | map.js   | Search Results screen |
+| POST   | /map/new    | map.js   | Create bookmark       |
+| PUT    | /map/edit   | map.js   | Edit bookmark         |
+| DELETE | /map/delete | map.js   | Deletes bookmark      |
 
 #### Entity Relationship Diagram
 
