@@ -55,7 +55,7 @@ describe("Creating a Bookmark", function () {
 
   describe("POST /map", function () {
     it("should redirect to /map on success", function (done) {
-      request(app)
+      agent
         .post("/map")
         .set("Content-Type", "application/x-www-form-urlencoded")
         .send({
@@ -70,7 +70,7 @@ describe("Creating a Bookmark", function () {
     });
 
     it("should not redirect on failure", function (done) {
-      request(app)
+      agent
         .post("/map")
         .set("Content-Type", "application/x-www-form-urlencoded")
         .send({
@@ -86,13 +86,13 @@ describe("Creating a Bookmark", function () {
 
   describe("GET /map/edit", function () {
     it("should return a 302 response", function (done) {
-      request(app).get("/map").expect(302, done);
+      agent.get("/map").expect(302, done);
     });
   });
 
   describe("PUT /map/edit", function () {
     it("should redirect to / on success", function (done) {
-      request(app)
+      agent
         .put("/map")
         .set("Content-Type", "application/x-www-form-urlencoded")
         .send({
