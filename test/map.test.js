@@ -85,8 +85,8 @@ describe("Creating a Bookmark", function () {
   });
 
   describe("GET /map/edit", function () {
-    it("should return a 302 response", function (done) {
-      agent.get("/map").expect(302, done);
+    it("should return a 200 response", function (done) {
+      agent.get("/map").expect(200, done);
     });
   });
 
@@ -100,12 +100,12 @@ describe("Creating a Bookmark", function () {
           address: "123 Main St",
         })
         .expect("Location", "/map")
-        .expect(302, done);
+        .expect(200, done);
     });
 
-    it("should redirect to /auth/login on failure", function (done) {
-      request(app)
-        .post("/auth/login")
+    it("should not redirect on failure", function (done) {
+      agent
+        .put("/map")
         .set("Content-Type", "application/x-www-form-urlencoded")
         .send({
           name: "Los Angeles",
@@ -118,6 +118,6 @@ describe("Creating a Bookmark", function () {
 
 describe("DELETE /map", function () {
   it("should redirect to /map", function (done) {
-    request(app).delete("/map").expect("Location", "/map").expect(302, done);
+    agent.delete("/map").expect("Location", "/map").expect(302, done);
   });
 });

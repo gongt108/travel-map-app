@@ -159,7 +159,7 @@ router.post("/", isLoggedIn, (req, res) => {
       })
       .then((newBookmark) => {
         console.log("here is the new bookmark", newBookmark.toJSON());
-        res.redirect("/");
+        res.redirect("/map");
       });
   });
 });
