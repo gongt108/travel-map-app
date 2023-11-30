@@ -29,6 +29,18 @@ Travel Map allows users to:
 
 ### Data Models
 
+### Default Routes
+
+| Method | Path         | Location  | Purpose              |
+| ------ | ------------ | --------- | -------------------- |
+| GET    | /            | server.js | Home page            |
+| GET    | /auth/login  | auth.js   | Login form           |
+| GET    | /auth/signup | auth.js   | Signup form          |
+| POST   | /auth/login  | auth.js   | Login user           |
+| POST   | /auth/signup | auth.js   | Creates User         |
+| GET    | /auth/logout | auth.js   | Removes session info |
+| GET    | /profile     | server.js | Regular User Profile |
+
 #### Entity Relationship Diagram
 
 ![ERD](./resources/erd.png)
